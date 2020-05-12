@@ -1,3 +1,5 @@
+export type Figure = 'rock' | 'paper' | 'scissors' | 'lizard' | 'spock';
+
 /**
  * Начало игры
  */
@@ -7,6 +9,14 @@ export type GameStartedMessage = {
 	/** Мой ход? */
 	myTurn: boolean;
 };
+
+/**
+ * Состояние игрока
+ */
+export type PlayerState = {
+	lives: number,
+	figure: string
+}
 
 /**
  * Игра прервана
@@ -22,8 +32,8 @@ export type GameAbortedMessage = {
 export type PlayerRollMessage = {
 	/** Тип сообщения */
 	type: 'playerRoll';
-	/** Число, названное игроком */
-	number: number;
+	/** Состояние игрока */
+	move: PlayerState;
 };
 
 /**
@@ -42,8 +52,8 @@ export type GameResultMessage = {
 export type ChangePlayerMessage = {
 	/** Тип сообщения */
 	type: 'changePlayer';
-	/** Мой ход? */
-	myTurn: boolean;
+	/** Кол-во сердец */
+	lives: number;
 };
 
 /**
