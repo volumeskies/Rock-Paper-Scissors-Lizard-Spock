@@ -1,6 +1,7 @@
 import { openScreen } from './screens.js';
 import * as GameScreen from './screens/game.js';
 import * as ResultScreen from './screens/result.js';
+import { PlayerState } from "../common/messages";
 
 GameScreen.setTurnHandler( turnHandler );
 ResultScreen.setRestartHandler( restartHandler );
@@ -25,11 +26,11 @@ function setSendMessage( sendMessageFunction: typeof sendMessage ): void
  * 
  * @param number Загаданное пользователем число
  */
-function turnHandler( number: number ): void
+function turnHandler( move: PlayerState ): void
 {
 	sendMessage( {
 		type: 'playerRoll',
-		number,
+		move,
 	} );
 }
 
@@ -56,7 +57,7 @@ function startGame(): void
  * 
  * @param myTurn Ход текущего игрока?
  */
-function changePlayer( myTurn: boolean ): void
+function changePlayer( myTurn: PlayerState ): void
 {
 	GameScreen.update( myTurn );
 }
