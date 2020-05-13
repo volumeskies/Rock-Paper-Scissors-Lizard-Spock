@@ -1,4 +1,4 @@
-import { startGame, changePlayer, endGame, setSendMessage } from './game.js';
+import { startGame, changePlayer, endGame, setSendMessage, startListener } from './game.js';
 
 import type {
 	AnyServerMessage,
@@ -64,15 +64,19 @@ function processMessage( sendMessage: SendMessage, message: AnyServerMessage ): 
 	{
 		case 'gameStarted':
 			startGame();
-			changePlayer( message.myTurn );
+			changePlayer( message.myTurn, message.lives );
 			break;
 		
+		case 'startButton':
+			startListener();
+			break;
+			
 		case 'changePlayer':
-			changePlayer( message.myTurn );
+			changePlayer( message.myTurn, message.lives );
 			break;
 		
 		case 'gameResult':
-			endGame( message.win ? 'win' : 'loose' );
+			endGame( message.lose ? 'loose' : 'win' );
 			break;
 		
 		case 'gameAborted':
