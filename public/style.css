@@ -11,6 +11,7 @@
 
 .figures__figure{
 	display: inline-block;
+	cursor: pointer;
 	height: 100px;
 	width: 100px;
 }
@@ -21,4 +22,9 @@
 	cursor: pointer;
 	color: white;
 	background: mediumslateblue;
+}
+
+.button:disabled{
+	background: grey;
+	cursor: default;
 }
