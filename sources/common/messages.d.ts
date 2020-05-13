@@ -1,5 +1,3 @@
-export type Figure = 'rock' | 'paper' | 'scissors' | 'lizard' | 'spock';
-
 /**
  * Начало игры
  */
@@ -8,6 +6,7 @@ export type GameStartedMessage = {
 	type: 'gameStarted';
 	/** Мой ход? */
 	myTurn: boolean;
+	lives: number;
 };
 
 /**
@@ -43,8 +42,12 @@ export type GameResultMessage = {
 	/** Тип сообщения */
 	type: 'gameResult';
 	/** Победа? */
-	win: boolean;
+	lose: boolean;
 };
+
+export type StartButtonMessage = {
+	type: 'startButton',
+}
 
 /**
  * Смена игрока
@@ -53,6 +56,7 @@ export type ChangePlayerMessage = {
 	/** Тип сообщения */
 	type: 'changePlayer';
 	/** Кол-во сердец */
+	myTurn: boolean;
 	lives: number;
 };
 
@@ -64,6 +68,9 @@ export type RepeatGame = {
 	type: 'repeatGame';
 };
 
+export type StartEvent = {
+	type: 'startEvent'
+}
 /**
  * Некорректный запрос клиента
  */
@@ -88,6 +95,7 @@ export type IncorrectResponseMessage = {
  * Сообщения от сервера к клиенту
  */
 export type AnyServerMessage =
+	| StartButtonMessage
 	| GameStartedMessage
 	| GameAbortedMessage
 	| GameResultMessage
@@ -99,6 +107,7 @@ export type AnyServerMessage =
  * Сообщения от клиента к серверу
  */
 export type AnyClientMessage =
+	| StartEvent
 	| PlayerRollMessage
 	| RepeatGame
 	| IncorrectRequestMessage
