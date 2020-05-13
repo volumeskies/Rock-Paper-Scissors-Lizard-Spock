@@ -12,7 +12,7 @@ const figures = document.getElementsByClassName('figures__figure') as HTMLCollec
 /**
  * Контейнер жизней
  */
-const lives = document.querySelector('.lives') as HTMLElement;
+const lives = document.getElementsByClassName('lives') as HTMLCollection;
 
 /**
  * Кнопка старт игры
@@ -37,10 +37,13 @@ if ( !title || !figures || !lives  || !start)
  */
 type TurnHandler = ( currentMove: PlayerState ) => void;
 
+type StartHandler = () => void;
 /**
  * Обработчик хода игрока
  */
 let turnHandler: TurnHandler;
+
+let startHandler: StartHandler;
 
 function figuresListener(): void{
 	for(let item of figures){
@@ -54,18 +57,22 @@ function removeFiguresListener(): void{
 	}
 }
 
-function startListener(): void{
-	start.addEventListener('click', onStart);
+function startGame(event: Event): void{
+	event.preventDefault();
+	start && startHandler();
+}
+
+function startEvent(): void{
+	start.addEventListener('click', startGame)
 }
 
 function removeStartListener(): void{
-	start.removeEventListener('click', onStart);
+	start.disabled = true;
 }
 
 const delay = (ms: number) => new Promise((resolve)=>setTimeout(resolve, ms));
 
-async function onStart(event: Event){
-	event.preventDefault();
+async function startListener() {
 	removeStartListener();
 	figuresListener();
 	await delay(5000);
@@ -93,6 +100,17 @@ function onFigure(event: Event): void{
 			currentMove.figure = 'spock';
 			break;
 	}
+	console.log('target', currentMove.figure);
+}
+
+function updateLives(life: number): void{
+	console.log(currentMove.lives);
+	if(life < lives[0].childElementCount){
+		lives[0].removeChild(lives[0].lastElementChild!);
+		currentMove.lives = life;
+		console.log('dfsf', currentMove.lives);
+	}
+	else return;
 }
 
 /**
@@ -100,18 +118,18 @@ function onFigure(event: Event): void{
  * 
  * @param myTurn Ход текущего игрока
  */
-function update( myTurn: PlayerState ): void
+function update( myTurn: boolean, lives: number ): void
 {
+	updateLives(lives);
 	if ( myTurn )
 	{
 		title.textContent = 'Ваш ход';
 		start.disabled = false;
-		startListener();
+		startEvent();
 		return;
 	}
 	title.textContent = 'Ход противника';
 	start.disabled = true;
-	removeStartListener();
 }
 
 /**
@@ -124,7 +142,14 @@ function setTurnHandler( handler: TurnHandler ): void
 	turnHandler = handler;
 }
 
+function setStartHandler(handler: StartHandler): void
+{
+	startHandler = handler;
+}
+
 export {
 	update,
 	setTurnHandler,
+	setStartHandler,
+	startListener
 };
