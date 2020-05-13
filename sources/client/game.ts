@@ -4,6 +4,7 @@ import * as ResultScreen from './screens/result.js';
 import { PlayerState } from "../common/messages";
 
 GameScreen.setTurnHandler( turnHandler );
+GameScreen.setStartHandler(startHandler);
 ResultScreen.setRestartHandler( restartHandler );
 
 /**
@@ -34,6 +35,13 @@ function turnHandler( move: PlayerState ): void
 	} );
 }
 
+function startHandler(): void
+{
+	sendMessage({
+		type: 'startEvent',
+	})
+}
+
 /**
  * Обрабатывает перезапуск игры
  */
@@ -52,14 +60,19 @@ function startGame(): void
 	openScreen( 'game' );
 }
 
+function startListener(): void
+{
+	GameScreen.startListener();
+}
+
 /**
  * Меняет активного игрока
  * 
  * @param myTurn Ход текущего игрока?
  */
-function changePlayer( myTurn: PlayerState ): void
+function changePlayer( myTurn: boolean, lives: number ): void
 {
-	GameScreen.update( myTurn );
+	GameScreen.update( myTurn, lives );
 }
 
 /**
@@ -78,4 +91,5 @@ export {
 	changePlayer,
 	endGame,
 	setSendMessage,
+	startListener
 };
